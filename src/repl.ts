@@ -1,4 +1,26 @@
+import { createInterface } from 'readline';
+import { stdin, stdout } from 'process';
+
 export function cleanInput(input: string): string[] {
-  const array = input.toLowerCase().trim().split(' ');
-  return array.map(item => item.trim()).filter(item => item.length > 0);
+    const array = input.toLowerCase().trim().split(' ');
+    return array.map(item => item.trim()).filter(item => item.length > 0);
+}
+
+export function startREPL() {
+    const rl = createInterface({
+        input: stdin,
+        output: stdout,
+        prompt: 'Pokedex > '
+    });
+
+    rl.prompt();
+    rl.on('line', (line) => {
+        const cleanedInput = cleanInput(line);
+        if (cleanedInput.length === 0) {
+            rl.prompt();
+            return;
+        }
+        console.log(`Your command was: ${cleanedInput[0]}`);
+        rl.prompt();
+    }); 
 }
