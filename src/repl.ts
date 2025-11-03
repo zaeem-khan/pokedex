@@ -1,5 +1,6 @@
 import { createInterface } from 'readline';
 import { stdin, stdout } from 'process';
+import { getCommands } from './command.js';
 
 export function cleanInput(input: string): string[] {
     const array = input.toLowerCase().trim().split(' ');
@@ -20,7 +21,14 @@ export function startREPL() {
             rl.prompt();
             return;
         }
-        console.log(`Your command was: ${cleanedInput[0]}`);
+        const commands = getCommands();
+
+        if (cleanedInput[0] in commands) {
+            commands[cleanedInput[0]].callback(commands);
+        } else {
+            console.log(`Unknown command: ${cleanedInput[0]}`);
+        }
+
         rl.prompt();
     }); 
 }
