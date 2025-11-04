@@ -5,7 +5,7 @@ export function cleanInput(input: string): string[] {
     return array.map(item => item.trim()).filter(item => item.length > 0);
 }
 
-export function startREPL(state: State) {
+export async function startREPL(state: State) {
     state.readline.prompt();
 
     state.readline.on('line', async (line) => {
@@ -22,9 +22,9 @@ export function startREPL(state: State) {
         }
 
         try {
-            cmd.callback(state);
+            await cmd.callback(state);
         } catch (error) {
-            console.log(error);
+            console.log((error as Error).message);
         }
         
         state.readline.prompt();
