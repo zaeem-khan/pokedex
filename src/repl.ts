@@ -14,15 +14,19 @@ export async function startREPL(state: State) {
             state.readline.prompt();
             return;
         }
-        const cmd = state.commands[cleanedInput[0]];
+
+        const commandName = cleanedInput[0];
+        const args = cleanedInput.slice(1);
+
+        const cmd = state.commands[commandName];
         if (!cmd) {
-            console.log(`Unknown command: ${cleanedInput[0]}. Type "help" for a list of commands.`);
+            console.log(`Unknown command: ${commandName}. Type "help" for a list of commands.`);
             state.readline.prompt();
             return;
         }
 
         try {
-            await cmd.callback(state);
+            await cmd.callback(state, ...args);
         } catch (error) {
             console.log((error as Error).message);
         }
